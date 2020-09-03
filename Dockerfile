@@ -11,7 +11,7 @@ RUN add-apt-repository -y ppa:isc/bind
 RUN apt-get -qqqy dist-upgrade
 RUN apt-get -qqqy install bind9=${DEB_VERSION} bind9-utils=${DEB_VERSION}
 
-VOLUME ["/etc/bind", "/var/cache/bind", "/var/lib/bind", "/var/log", "/run/named"]
+VOLUME ["/etc/bind", "/var/cache/bind", "/var/lib/bind", "/var/log"]
 
 RUN mkdir -p /etc/bind && chown root:bind /etc/bind/ && chmod 755 /etc/bind
 RUN mkdir -p /var/cache/bind && chown bind:bind /var/cache/bind && chmod 755 /var/cache/bind

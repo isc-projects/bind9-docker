@@ -3,7 +3,7 @@ MAINTAINER BIND 9 Developers <bind9-dev@isc.org>
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV LC_ALL C.UTF-8
-ENV DEB_VERSION=1:9.16.6-3+ubuntu20.04.1+isc+1
+ENV DEB_VERSION=1:9.16.6-3+ubuntu20.04.1+isc+3
 
 RUN apt-get -qqqy update
 RUN apt-get -qqqy install apt-utils software-properties-common dctrl-tools

@@ -7,7 +7,7 @@ ENV DEB_VERSION=1:9.17.4-1+ubuntu20.04.1+isc+5
 
 RUN apt-get -qqqy update
 RUN apt-get -qqqy install apt-utils software-properties-common dctrl-tools
-RUN add-apt-repository -y ppa:isc/bind
+RUN add-apt-repository -y ppa:isc/bind-dev
 RUN apt-get -qqqy dist-upgrade
 RUN apt-get -qqqy install bind9=${DEB_VERSION} bind9-utils=${DEB_VERSION}
 

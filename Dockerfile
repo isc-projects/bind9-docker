@@ -3,13 +3,13 @@ MAINTAINER BIND 9 Developers <bind9-dev@isc.org>
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV LC_ALL C.UTF-8
-ENV DEB_VERSION=1:9.17.4-1+ubuntu20.04.1+isc+5
 
 RUN apt-get -qqqy update
 RUN apt-get -qqqy install apt-utils software-properties-common dctrl-tools
+
+ARG DEB_VERSION=1:9.17.4-1+ubuntu20.04.1+isc+5
 RUN add-apt-repository -y ppa:isc/bind-dev
-RUN apt-get -qqqy dist-upgrade
-RUN apt-get -qqqy install bind9=${DEB_VERSION} bind9-utils=${DEB_VERSION}
+RUN apt-get -qqqy update && apt-get -qqqy dist-upgrade && apt-get -qqqy install bind9=$DEB_VERSION bind9-utils=$DEB_VERSION
 
 VOLUME ["/etc/bind", "/var/cache/bind", "/var/lib/bind", "/var/log"]
 

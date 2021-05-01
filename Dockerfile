@@ -7,7 +7,7 @@ ENV LC_ALL C.UTF-8
 RUN apt-get -qqqy update
 RUN apt-get -qqqy install apt-utils software-properties-common dctrl-tools
 
-ARG DEB_VERSION=1:9.11.31+dfsg-1+ubuntu20.04.1+isc+2
+ARG DEB_VERSION=1:9.11.31+dfsg-2+ubuntu20.04.1+isc+1
 RUN add-apt-repository -y ppa:isc/bind-esv
 RUN apt-get -qqqy update && apt-get -qqqy dist-upgrade && apt-get -qqqy install bind9=$DEB_VERSION bind9utils=$DEB_VERSION
 

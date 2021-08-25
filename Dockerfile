@@ -11,13 +11,13 @@ ARG DEB_VERSION=1:9.17.17-1+ubuntu21.04.1+isc+1
 RUN add-apt-repository -y ppa:isc/bind-dev
 RUN apt-get -qqqy update && apt-get -qqqy dist-upgrade && apt-get -qqqy install bind9=$DEB_VERSION bind9-utils=$DEB_VERSION
 
-VOLUME ["/etc/bind", "/var/cache/bind", "/var/lib/bind", "/var/log"]
-
 RUN mkdir -p /etc/bind && chown root:bind /etc/bind/ && chmod 755 /etc/bind
 RUN mkdir -p /var/cache/bind && chown bind:bind /var/cache/bind && chmod 755 /var/cache/bind
 RUN mkdir -p /var/lib/bind && chown bind:bind /var/lib/bind && chmod 755 /var/lib/bind
 RUN mkdir -p /var/log/bind && chown bind:bind /var/log/bind && chmod 755 /var/log/bind
 RUN mkdir -p /run/named && chown bind:bind /run/named && chmod 755 /run/named
+
+VOLUME ["/etc/bind", "/var/cache/bind", "/var/lib/bind", "/var/log"]
 
 EXPOSE 53/udp 53/tcp 953/tcp
 

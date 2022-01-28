@@ -20,7 +20,7 @@ RUN apt-get -qqqy dist-upgrade
 RUN apt-get -qqqy install bind9=$DEB_VERSION bind9utils=$DEB_VERSION
 
 # Now remove the pkexec that got pulled as dependency to software-properties-common
-RUN apt-get --purge -y remove policykit-1
+RUN apt-get --purge -y autoremove policykit-1
 
 RUN mkdir -p /etc/bind && chown root:bind /etc/bind/ && chmod 755 /etc/bind
 RUN mkdir -p /var/cache/bind && chown bind:bind /var/cache/bind && chmod 755 /var/cache/bind

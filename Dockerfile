@@ -4,12 +4,23 @@ MAINTAINER BIND 9 Developers <bind9-dev@isc.org>
 ENV DEBIAN_FRONTEND noninteractive
 ENV LC_ALL C.UTF-8
 
-RUN apt-get -qqqy update
-RUN apt-get -qqqy install apt-utils software-properties-common dctrl-tools
-
 ARG DEB_VERSION=1:9.11.36-1+ubuntu20.04.1+isc+1
+
+# Install add-apt-repository command
+RUN apt-get -qqqy update
+RUN apt-get -qqqy dist-upgrade
+RUN apt-get -qqqy install --no-install-recommends apt-utils software-properties-common dctrl-tools
+
+# Add the BIND 9 APT Repository
 RUN add-apt-repository -y ppa:isc/bind-esv
-RUN apt-get -qqqy update && apt-get -qqqy dist-upgrade && apt-get -qqqy install bind9=$DEB_VERSION bind9utils=$DEB_VERSION
+
+# Install BIND 9
+RUN apt-get -qqqy update
+RUN apt-get -qqqy dist-upgrade
+RUN apt-get -qqqy install bind9=$DEB_VERSION bind9utils=$DEB_VERSION
+
+# Now remove the pkexec that got pulled as dependency to software-properties-common
+RUN apt-get --purge -y remove policykit-1
 
 RUN mkdir -p /etc/bind && chown root:bind /etc/bind/ && chmod 755 /etc/bind
 RUN mkdir -p /var/cache/bind && chown bind:bind /var/cache/bind && chmod 755 /var/cache/bind

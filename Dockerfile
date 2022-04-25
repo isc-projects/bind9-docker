@@ -1,4 +1,4 @@
-FROM ubuntu:focal
+FROM ubuntu:jammy
 MAINTAINER BIND 9 Developers <bind9-dev@isc.org>
 
 ENV DEBIAN_FRONTEND noninteractive

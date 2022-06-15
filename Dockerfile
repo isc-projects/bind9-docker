@@ -9,7 +9,7 @@ ARG DEB_VERSION=1:9.18.4-1+ubuntu22.04.1+isc+1
 # Install add-apt-repository command
 RUN apt-get -qqqy update
 RUN apt-get -qqqy dist-upgrade
-RUN apt-get -qqqy install --no-install-recommends apt-utils software-properties-common dctrl-tools
+RUN apt-get -qqqy install --no-install-recommends apt-utils software-properties-common dctrl-tools gpg-agent
 
 # Add the BIND 9 APT Repository
 RUN add-apt-repository -y ppa:isc/bind

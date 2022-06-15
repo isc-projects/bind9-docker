@@ -1,10 +1,10 @@
-FROM ubuntu:jammy
+FROM ubuntu:focal
 MAINTAINER BIND 9 Developers <bind9-dev@isc.org>
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV LC_ALL C.UTF-8
 
-ARG DEB_VERSION=1:9.16.30-1+ubuntu22.04.1+isc+2
+ARG DEB_VERSION=1:9.16.30-1+ubuntu20.04.1+isc+2
 
 # Install add-apt-repository command
 RUN apt-get -qqqy update

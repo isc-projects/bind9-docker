@@ -1,0 +1,22 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "v9.16" ]
+  pull_request:
+    branches: [ "v9.16" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: |
+        docker buildx create --use --platform=linux/arm64,linux/amd64 --name multi-platform-bind9
+        docker buildx inspect --bootstrap
+        docker buildx build --platform=linux/arm64,linux/amd64 --tag my-image-name:$(date +%s)  -f ./Dockerfile .
+      shell: bash

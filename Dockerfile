@@ -4,7 +4,7 @@ MAINTAINER BIND 9 Developers <bind9-dev@isc.org>
 ENV DEBIAN_FRONTEND noninteractive
 ENV LC_ALL C.UTF-8
 
-ARG DEB_VERSION=1:9.16.49-1+ubuntu20.04.1+deb.sury.org+1
+ARG DEB_VERSION=1:9.16.50-1+ubuntu20.04.1+deb.sury.org+1
 
 # Install add-apt-repository command
 RUN apt-get -qqqy update

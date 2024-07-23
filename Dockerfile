@@ -4,7 +4,7 @@ MAINTAINER BIND 9 Developers <bind9-dev@isc.org>
 ENV DEBIAN_FRONTEND noninteractive
 ENV LC_ALL C.UTF-8
 
-ARG DEB_VERSION=1:9.18.27-1+ubuntu22.04.1+deb.sury.org+1
+ARG DEB_VERSION=1:9.18.28-1+ubuntu22.04.1+deb.sury.org+1
 
 # Install add-apt-repository command
 RUN apt-get -qqqy update
@@ -12,7 +12,7 @@ RUN apt-get -qqqy dist-upgrade
 RUN apt-get -qqqy install --no-install-recommends apt-utils software-properties-common dctrl-tools gpg-agent
 
 # Add the BIND 9 APT Repository
-RUN add-apt-repository -y ppa:isc/bind
+RUN add-apt-repository -y ppa:isc/bind-esv
 
 # Install BIND 9
 RUN apt-get -qqqy update

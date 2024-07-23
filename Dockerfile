@@ -1,10 +1,10 @@
-FROM ubuntu:jammy
+FROM ubuntu:noble
 MAINTAINER BIND 9 Developers <bind9-dev@isc.org>
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV LC_ALL C.UTF-8
 
-ARG DEB_VERSION=1:9.19.24-2+ubuntu22.04.1+deb.sury.org+1
+ARG DEB_VERSION=1:9.20.0-1+ubuntu24.04.1+deb.sury.org+1
 
 # Install add-apt-repository command
 RUN apt-get -qqqy update

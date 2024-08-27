@@ -7,10 +7,10 @@ ENV LC_ALL C.UTF-8
 ARG BIND9_VERSION=9.18.29
 ARG BIND9_CHECKSUM=c39ce5d09a8cb10108116fa533445de9f7fdfe0063e8d7c4c46ba1fd20d7bf6d
 
-RUN apk update
-RUN apk upgrade
+RUN apk --no-cache update
+RUN apk --no-cache upgrade
 
-RUN apk add \
+RUN apk --no-cache add \
         autoconf \
         automake \
         build-base \
@@ -51,9 +51,10 @@ RUN apk add \
 
 RUN mkdir -p /usr/src
 ADD https://downloads.isc.org/isc/bind9/${BIND9_VERSION}/bind-${BIND9_VERSION}.tar.xz /usr/src
-RUN cd /usr/src && echo "${BIND9_CHECKSUM}  bind-${BIND9_VERSION}.tar.xz" | sha256sum -c -
-RUN cd /usr/src && tar -xJf bind-${BIND9_VERSION}.tar.xz
-RUN cd /usr/src/bind-${BIND9_VERSION} && \
+RUN cd /usr/src && \
+    ( echo "${BIND9_CHECKSUM}  bind-${BIND9_VERSION}.tar.xz" | sha256sum -c - ) && \
+    tar -xJf bind-${BIND9_VERSION}.tar.xz && \
+    cd /usr/src/bind-${BIND9_VERSION} && \
     ./configure --prefix /usr \
                 --sysconfdir=/etc/bind \
                 --localstatedir=/ \
@@ -65,16 +66,13 @@ RUN cd /usr/src/bind-${BIND9_VERSION} && \
                 --with-lmdb=/usr \
                 --with-gnu-ld \
                 --with-maxminddb \
-                --enable-dnstap
-RUN cd /usr/src/bind-${BIND9_VERSION} && \
-    make -j
-RUN cd /usr/src/bind-${BIND9_VERSION} && \
-    make install
-RUN rm -rf /usr/src
+                --enable-dnstap && \
+    make -j && \
+    make install && \
+    rm -rf /usr/src
 
 # Create user and group
-RUN addgroup -S bind
-RUN adduser -S -H -h /var/cache/bind -G bind bind
+RUN addgroup -S bind && adduser -S -H -h /var/cache/bind -G bind bind
 
 # Create default configuration file
 RUN mkdir -p /etc/bind && chown root:bind /etc/bind/ && chmod 755 /etc/bind
@@ -94,7 +92,7 @@ RUN mkdir -p /var/log/bind && chown bind:bind /var/log/bind && chmod 755 /var/lo
 RUN mkdir -p /run/named && chown bind:bind /run/named && chmod 755 /run/named
 
 # Remove development packages
-RUN apk del \
+RUN apk --no-cache del \
         autoconf \
         automake \
         build-base \

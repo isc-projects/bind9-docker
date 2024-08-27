@@ -83,10 +83,6 @@ RUN mkdir -p /etc/bind && chown root:bind /etc/bind/ && chmod 755 /etc/bind
 COPY named.conf /etc/bind
 RUN chown root:bind /etc/bind/named.conf && chmod 644 /etc/bind/named.conf
 
-# Generate the default RNDC key
-RUN rndc-confgen -a
-RUN chown root:bind /etc/bind/rndc.key && chmod 644 /etc/bind/rndc.key
-
 # Create working directory
 RUN mkdir -p /var/cache/bind && chown bind:bind /var/cache/bind && chmod 755 /var/cache/bind
 

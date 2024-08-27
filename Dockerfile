@@ -125,6 +125,6 @@ RUN apk del \
 
 VOLUME ["/etc/bind", "/var/cache/bind", "/var/lib/bind", "/var/log"]
 
-EXPOSE 53/udp 53/tcp 953/tcp
+EXPOSE 53/udp 53/tcp 953/tcp 853/tcp 443/tcp
 
 CMD ["/usr/sbin/named", "-f", "-c", "/etc/bind/named.conf", "-u", "bind"]

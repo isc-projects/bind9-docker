@@ -52,7 +52,7 @@ RUN apk add \
         userspace-rcu-dev
 
 RUN mkdir -p /usr/src
-RUN cd /usr/src && curl -sSLO https://downloads.isc.org/isc/bind9/9.21.0/bind-${BIND9_VERSION}.tar.xz
+RUN cd /usr/src && curl -sSLO https://downloads.isc.org/isc/bind9/${BIND9_VERSION}/bind-${BIND9_VERSION}.tar.xz
 RUN cd /usr/src && tar -xJf bind-${BIND9_VERSION}.tar.xz
 RUN cd /usr/src/bind-${BIND9_VERSION} && \
     ./configure --prefix /usr \

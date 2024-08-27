@@ -5,6 +5,7 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV LC_ALL C.UTF-8
 
 ARG BIND9_VERSION=9.21.0
+ARG BIND9_CHECKSUM=b4c91c0e6767b62139e818e29b3bb4b9704bc14a868b25bf8491deea0254df96
 
 RUN apk update
 RUN apk upgrade
@@ -13,7 +14,6 @@ RUN apk add \
         autoconf \
         automake \
         build-base \
-        curl \
         fstrm \
         fstrm-dev \
         jemalloc \
@@ -52,7 +52,8 @@ RUN apk add \
         userspace-rcu-dev
 
 RUN mkdir -p /usr/src
-RUN cd /usr/src && curl -sSLO https://downloads.isc.org/isc/bind9/${BIND9_VERSION}/bind-${BIND9_VERSION}.tar.xz
+ADD https://downloads.isc.org/isc/bind9/${BIND9_VERSION}/bind-${BIND9_VERSION}.tar.xz /usr/src
+RUN cd /usr/src && echo "${BIND9_CHECKSUM}  bind-${BIND9_VERSION}.tar.xz" | sha256sum -c -
 RUN cd /usr/src && tar -xJf bind-${BIND9_VERSION}.tar.xz
 RUN cd /usr/src/bind-${BIND9_VERSION} && \
     ./configure --prefix /usr \
@@ -103,7 +104,6 @@ RUN apk del \
         autoconf \
         automake \
         build-base \
-        curl \
         fstrm-dev \
         gnutls-utils \
         jemalloc-dev \

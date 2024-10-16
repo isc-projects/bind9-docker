@@ -4,8 +4,8 @@ MAINTAINER BIND 9 Developers <bind9-dev@isc.org>
 ENV DEBIAN_FRONTEND noninteractive
 ENV LC_ALL C.UTF-8
 
-ARG BIND9_VERSION=9.20.2
-ARG BIND9_CHECKSUM=a31dba2aaa1b371902dd0474eb3963f47b7ffed2bd9ece7da4834e23210d6067
+ARG BIND9_VERSION=9.20.3
+ARG BIND9_CHECKSUM=f90c2da1621299f56a2e6585a6fe459ec3efd6f2fdf84a8fbf31b40be7698a73
 
 RUN apk --no-cache update
 RUN apk --no-cache upgrade

@@ -68,7 +68,6 @@ RUN cd /usr/src && \
                 --with-lmdb=/usr \
                 --with-gnu-ld \
                 --with-maxminddb \
-		--with-zonedb=rbtdb \
                 --enable-dnstap && \
     make -j && \
     make install && \

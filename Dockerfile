@@ -4,6 +4,9 @@ LABEL org.opencontainers.image.authors="BIND 9 Developers <bind9-dev@isc.org>"
 ENV DEBIAN_FRONTEND noninteractive
 ENV LC_ALL C.UTF-8
 
+ARG UID=53
+ARG GID=53
+
 ARG BIND9_VERSION=9.20.6
 ARG BIND9_CHECKSUM=ed7f54b44f84a7201a2fa7a949f3021ea568529bfad90fca664fd55c05104134
 
@@ -74,7 +77,7 @@ RUN cd /usr/src && \
     rm -rf /usr/src
 
 # Create user and group
-RUN addgroup -S bind && adduser -S -H -h /var/cache/bind -G bind bind
+RUN addgroup -S -g ${GID} bind && adduser -S -u ${UID} -H -h /var/cache/bind -G bind bind
 
 # Create default configuration file
 RUN mkdir -p /etc/bind && chown root:bind /etc/bind/ && chmod 755 /etc/bind

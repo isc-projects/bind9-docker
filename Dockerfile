@@ -1,5 +1,5 @@
 FROM alpine:latest
-MAINTAINER BIND 9 Developers <bind9-dev@isc.org>
+LABEL org.opencontainers.image.authors="BIND 9 Developers <bind9-dev@isc.org>"
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV LC_ALL C.UTF-8

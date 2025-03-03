@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM alpine:latest as builder
 LABEL org.opencontainers.image.authors="BIND 9 Developers <bind9-dev@isc.org>"
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -58,8 +58,8 @@ RUN cd /usr/src && \
     ( echo "${BIND9_CHECKSUM}  bind-${BIND9_VERSION}.tar.xz" | sha256sum -c - ) && \
     tar -xJf bind-${BIND9_VERSION}.tar.xz && \
     cd /usr/src/bind-${BIND9_VERSION} && \
-    ./configure --prefix /usr \
-                --sysconfdir=/etc/bind \
+    ./configure --prefix /dist/usr \
+                --sysconfdir=/dist/etc/bind \
                 --localstatedir=/ \
                 --enable-shared \
                 --disable-static \
@@ -73,6 +73,40 @@ RUN cd /usr/src && \
     make -j && \
     make install && \
     rm -rf /usr/src
+
+FROM alpine:latest
+LABEL org.opencontainers.image.authors="BIND 9 Developers <bind9-dev@isc.org>"
+
+ENV DEBIAN_FRONTEND noninteractive
+ENV LC_ALL C.UTF-8
+
+ARG UID=53
+ARG GID=53
+
+RUN apk --no-cache update
+RUN apk --no-cache upgrade
+
+RUN apk --no-cache add \
+        fstrm \
+        jemalloc \
+        json-c \
+        krb5-libs \
+        libcap2 \
+        libidn2 \
+        libmaxminddb-libs \
+        libuv \
+        libuv-dbg \
+        libxml2 \
+        libxml2-dbg \
+        lmdb \
+        musl-dbg \
+        nghttp2-libs \
+        openssl-dbg \
+        procps \
+        protobuf-c \
+        tzdata
+
+COPY --from=builder /dist/ /
 
 # Create user and group
 RUN addgroup -S -g ${GID} bind && adduser -S -u ${UID} -H -h /var/cache/bind -G bind bind
@@ -93,29 +127,6 @@ RUN mkdir -p /var/log/bind && chown bind:bind /var/log/bind && chmod 755 /var/lo
 
 # Create PID directory
 RUN mkdir -p /run/named && chown bind:bind /run/named && chmod 755 /run/named
-
-# Remove development packages
-RUN apk --no-cache del \
-        autoconf \
-        automake \
-        build-base \
-        fstrm-dev \
-        gnutls-utils \
-        jemalloc-dev \
-        json-c-dev \
-        krb5-dev \
-        libcap-dev \
-        libidn2-dev \
-        libmaxminddb-dev \
-        libtool \
-        libuv-dev \
-        libxml2-dev \
-        libxslt \
-        lmdb-dev \
-        make \
-        nghttp2-dev \
-        openssl-dev \
-        protobuf-c-dev
 
 VOLUME ["/etc/bind", "/var/cache/bind", "/var/lib/bind", "/var/log"]
 

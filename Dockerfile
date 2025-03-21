@@ -1,8 +1,8 @@
-FROM alpine:latest
+# Create common base 
+FROM alpine:latest AS base
 LABEL org.opencontainers.image.authors="BIND 9 Developers <bind9-dev@isc.org>"
 
-ENV DEBIAN_FRONTEND noninteractive
-ENV LC_ALL C.UTF-8
+ENV LC_ALL=C.UTF-8
 
 ARG UID=53
 ARG GID=53
@@ -12,6 +12,9 @@ ARG BIND9_CHECKSUM=ff9722bdb353df442ca95444148aa23e3d16153e4576d2bdaa008fa7f37e0
 
 RUN apk --no-cache update
 RUN apk --no-cache upgrade
+
+# Build BIND 9
+FROM base AS builder
 
 RUN apk --no-cache add \
         autoconf \
@@ -73,8 +76,31 @@ RUN cd /usr/src && \
                 --with-maxminddb \
                 --enable-dnstap && \
     make -j && \
-    make install && \
+    make install DESTDIR=/dist  && \
     rm -rf /usr/src
+
+# Create final image
+FROM base
+
+RUN apk --no-cache add \
+        fstrm \
+        jemalloc \
+        json-c \
+        krb5-libs \
+        libcap2 \
+        libidn2 \
+        libmaxminddb-libs \
+        libuv \
+        libxml2 \
+        lmdb \
+        nghttp2-libs \
+        procps \
+        protobuf-c \
+        tzdata \
+        userspace-rcu
+
+# Copy binaries from previous stage
+COPY --from=builder /dist/ /
 
 # Create user and group
 RUN addgroup -S -g ${GID} bind && adduser -S -u ${UID} -H -h /var/cache/bind -G bind bind
@@ -95,30 +121,6 @@ RUN mkdir -p /var/log/bind && chown bind:bind /var/log/bind && chmod 755 /var/lo
 
 # Create PID directory
 RUN mkdir -p /run/named && chown bind:bind /run/named && chmod 755 /run/named
-
-# Remove development packages
-RUN apk --no-cache del \
-        autoconf \
-        automake \
-        build-base \
-        fstrm-dev \
-        gnutls-utils \
-        jemalloc-dev \
-        json-c-dev \
-        krb5-dev \
-        libcap-dev \
-        libidn2-dev \
-        libmaxminddb-dev \
-        libtool \
-        libuv-dev \
-        libxml2-dev \
-        libxslt \
-        lmdb-dev \
-        make \
-        nghttp2-dev \
-        openssl-dev \
-        protobuf-c-dev \
-        userspace-rcu-dev
 
 VOLUME ["/etc/bind", "/var/cache/bind", "/var/lib/bind", "/var/log"]
 

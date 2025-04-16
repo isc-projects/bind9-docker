@@ -1,4 +1,4 @@
-# Create common base 
+# Create common base
 FROM alpine:latest AS base
 LABEL org.opencontainers.image.authors="BIND 9 Developers <bind9-dev@isc.org>"
 
@@ -7,8 +7,8 @@ ENV LC_ALL=C.UTF-8
 ARG UID=53
 ARG GID=53
 
-ARG BIND9_VERSION=9.18.35
-ARG BIND9_CHECKSUM=1bf332a8c056d92b87ffde518747f0b7ffd3e48be7ecaa43fa37fca131c52020
+ARG BIND9_VERSION=9.18.36
+ARG BIND9_CHECKSUM=cd9a667bd33637dd9af331e4a203837cb3d53de5747eb2973c816dfaa68708f1
 
 RUN apk --no-cache update
 RUN apk --no-cache upgrade

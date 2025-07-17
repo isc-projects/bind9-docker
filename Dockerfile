@@ -17,8 +17,6 @@ RUN apk --no-cache upgrade
 FROM base AS builder
 
 RUN apk --no-cache add \
-        autoconf \
-        automake \
         build-base \
         fstrm \
         fstrm-dev \
@@ -34,7 +32,6 @@ RUN apk --no-cache add \
         libidn2-dev \
         libmaxminddb-dev \
         libmaxminddb-libs \
-        libtool \
         libuv \
         libuv-dbg \
         libuv-dev \
@@ -44,12 +41,14 @@ RUN apk --no-cache add \
         libxslt \
         lmdb \
         lmdb-dev \
-        make \
+        meson \
         musl-dbg \
+        ninja \
         nghttp2-dev \
         nghttp2-libs \
         openssl-dbg \
         openssl-dev \
+        perl \
         procps \
 	protobuf-c \
         protobuf-c-dev \
@@ -63,20 +62,19 @@ RUN cd /usr/src && \
     ( echo "${BIND9_CHECKSUM}  bind-${BIND9_VERSION}.tar.xz" | sha256sum -c - ) && \
     tar -xJf bind-${BIND9_VERSION}.tar.xz && \
     cd /usr/src/bind-${BIND9_VERSION} && \
-    ./configure --prefix /usr \
+    meson setup --prefix=/usr \
                 --sysconfdir=/etc/bind \
                 --localstatedir=/ \
-                --enable-shared \
-                --disable-static \
-                --with-gssapi \
-                --with-libidn2 \
-                --with-json-c \
-                --with-lmdb=/usr \
-                --with-gnu-ld \
-                --with-maxminddb \
-                --enable-dnstap && \
-    make -j && \
-    make install DESTDIR=/dist  && \
+                --default-library=shared \
+                -Dgssapi=enabled \
+                -Didn=enabled \
+                -Dstats-json=enabled \
+                -Dlmdb=enabled \
+                -Dgeoip=enabled \
+                -Ddnstap=enabled \
+                build && \
+    meson compile -j -1 -C build && \
+    meson install -C build --destdir=/dist && \
     rm -rf /usr/src
 
 # Create final image

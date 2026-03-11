@@ -33,3 +33,5 @@ VOLUME ["/etc/bind", "/var/cache/bind", "/var/lib/bind", "/var/log"]
 EXPOSE 53/udp 53/tcp 953/tcp
 
 CMD ["/usr/sbin/named", "-f", "-c", "/etc/bind/named.conf", "-u", "bind"]
+
+HEALTHCHECK --start-period=60s CMD dig +norecurse +short +retry=0 @127.0.0.1 some.domain.if.you.like. || exit 1

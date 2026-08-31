@@ -1,5 +1,5 @@
 # Create common base
-FROM alpine:latest AS base
+FROM alpine:3.24 AS base
 LABEL org.opencontainers.image.authors="BIND 9 Developers <bind9-dev@isc.org>"
 
 ENV LC_ALL=C.UTF-8

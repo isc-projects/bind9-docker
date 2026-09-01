@@ -13,6 +13,15 @@ ARG BIND9_CHECKSUM=bec622d80eeaa5a97b3cebc2afb6545c888e6e5fca98f63b04fd958d26463
 RUN apk --no-cache update
 RUN apk --no-cache upgrade
 
+# Fetch the source tarball.  BIND 9 CI overrides this stage with a directory
+# containing a tarball built from the current source tree ("docker build
+# --build-context tarball=<directory>"), so that this Dockerfile is tested
+# before a release is tagged.
+FROM base AS tarball
+
+ADD https://downloads.isc.org/isc/bind9/${BIND9_VERSION}/bind-${BIND9_VERSION}.tar.xz /
+RUN echo "${BIND9_CHECKSUM}  /bind-${BIND9_VERSION}.tar.xz" | sha256sum -c -
+
 # Build BIND 9
 FROM base AS builder
 
@@ -56,10 +65,8 @@ RUN apk --no-cache add \
         userspace-rcu \
         userspace-rcu-dev
 
-RUN mkdir -p /usr/src
-ADD https://downloads.isc.org/isc/bind9/${BIND9_VERSION}/bind-${BIND9_VERSION}.tar.xz /usr/src
+COPY --from=tarball /bind-${BIND9_VERSION}.tar.xz /usr/src/
 RUN cd /usr/src && \
-    ( echo "${BIND9_CHECKSUM}  bind-${BIND9_VERSION}.tar.xz" | sha256sum -c - ) && \
     tar -xJf bind-${BIND9_VERSION}.tar.xz && \
     cd /usr/src/bind-${BIND9_VERSION} && \
     meson setup --prefix=/usr \

@@ -65,6 +65,7 @@ RUN cd /usr/src && \
     meson setup --prefix=/usr \
                 --sysconfdir=/etc/bind \
                 --localstatedir=/ \
+                --buildtype=debugoptimized \
                 --default-library=shared \
                 -Dgssapi=enabled \
                 -Didn=enabled \
